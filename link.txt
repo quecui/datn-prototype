@@ -1,0 +1,31 @@
+curl -X GET http://storm:hunghp1502@localhost:8080/jenkins/job/demo/config.xml -o config.xml
+curl -s -XPOST 'http://storm:hunghp1502@localhost:8080/jenkins/createItem?name=yourJobName' --data-binary @config.xml -H "Content-Type:text/xml"
+a56aa505b3796a53c1b23f6b7bd84edc
+curl -X POST http://developer:developer@localhost:8080/job/test/config.xml --data-binary "@mymodifiedlocalconfig.xml"
+curl -s -XPOST 'http://storm:hunghp1502@localhost:8080/jenkins/job/demo/config.xml' --data-binary @config.xml -H "Content-Type:text/xml"
+
+#install plugin
+host=http://localhost:8080
+url=/pluginManager/installNecessaryPlugins
+
+# git plugin https://wiki.jenkins-ci.org/display/JENKINS/Git+Plugin
+curl -X POST -d '<jenkins><install plugin="git@2.0" /></jenkins>' --header 'Content-Type: text/xml' $host$url
+
+# artifactory plugin https://wiki.jenkins-ci.org/display/JENKINS/Artifactory+Plugin
+curl -X POST -d '<jenkins><install plugin="artifactory@2.2.1" /></jenkins>' --header 'Content-Type: text/xml' $host$url
+
+# wait 20 sec
+sleep 20
+
+# jenkins safe restart
+curl -X POST $host/safeRestart
+
+http://localhost:8080/jenkins/pluginManager/api/xml?depth=1
+http://localhost:8080/jenkins/pluginManager/api/xml?depth=1&xpath=/*/*/shortName|/*/*/version&wrapper=plugins
+
+Jenkins.instance.pluginManager.plugins.each{
+  plugin ->
+    println ("${plugin.getDisplayName()} (${plugin.getShortName()}): ${plugin.getVersion()}")
+}
+
+
