@@ -29,3 +29,7 @@ Jenkins.instance.pluginManager.plugins.each{
 }
 
 
+http://localhost:8080/queue/api/json?depth=1
+http://localhost:8080/job/demo/api/xml?tree=healthReport[iconClassName,iconUrl]
+http://localhost:8080/job/demo/lastBuild/api/xml?tree=estimatedDuration,duration
+http://localhost:8080/job/demo/api/xml

@@ -1,12 +1,12 @@
 package com.uet;
 
+import com.offbytwo.jenkins.JenkinsServer;
 import com.sun.deploy.net.HttpUtils;
 import com.sun.org.apache.regexp.internal.RE;
 import com.uet.models.CSRFToken;
 import com.uet.models.JobDetail;
 import com.uet.models.Jobs;
 import com.uet.models.ListJob;
-import hudson.security.csrf.DefaultCrumbIssuer;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.auth.AuthScope;
@@ -34,10 +34,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONObject;
 
 import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
-import java.net.URL;
+import java.net.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -48,19 +45,19 @@ import java.util.List;
  * Created by stormspirit on 7/28/2017.
  */
 public class Application {
-    static final String JENKINS_URL = "http://localhost:9099/jenkins";
-    static final String username = "storm";
+    static final String JENKINS_URL = "http://localhost:8080/";
+    static final String username = "admin";
     static final String password = "hunghp1502";
-    static final String jobName = "springdemo";
+    static final String jobName = "demo";
     static final String buildToken = "demo";
     static String CSRFToken = "";
     static String CSRFKey = "";
 
-    public static void main(String[] args) throws IOException, InterruptedException {
+    public static void main(String[] args) throws IOException, InterruptedException, URISyntaxException {
         //tét
-        DefaultHttpClient client = setCredentialForJenkins(username, password);
-        getCSRFToken(client, setContext());
-        createUser(client, setContext());
+//        DefaultHttpClient client = setCredentialForJenkins(username, password);
+//        getCSRFToken(client, setContext());
+//        createUser(client, setContext());
       // getAllJob(client, setContext());
 //        showJobDetails(client, setContext(), false);
 //        buildJob(client, jobName, buildToken, setContext());
@@ -71,14 +68,18 @@ public class Application {
         //deleteJob(client, setContext(), "job23");
 //        copyJob(client, setContext());
         //createJob(client, setContext(), "springdemo");
-       // scheduleSCMPolling(client, setContext(), "demo");
+        //scheduleSCMPolling(client, setContext(), "demo");
         //updateDescription(client, setContext(), "demo");
 //        shutdown(client, setContext());
 //        restart(client, setContext());
 //        cancelShutdown(client, setContext());
 //        getDescription(client, setContext(), "demo");
        // getLog(client, setContext());
-        //getPlugin(client, setContext());
+//        getPlugin(client, setContext());
+
+        JenkinsServer a = new JenkinsServer(new URI("http://localhost:8080"), "admin", "hunghp1502");
+        a.createJob("hhhhhh", "", true);
+        a.
     }
 
 
@@ -351,7 +352,8 @@ public class Application {
     }
 
     public static void getPlugin(DefaultHttpClient client, BasicHttpContext context) throws IOException {
-        String url = "http://localhost:8080/jenkins/pluginManager/prevalidateConfig";
+//        String url = "http://localhost:8080/jenkins/pluginManager/prevalidateConfig";
+        String url = "http://localhost:8080/queue/?depth=1";
         HttpPost req = new HttpPost(url);
         req.setHeader("Content-Type", "text/xml");
         req.setHeader(CSRFKey, CSRFToken);
